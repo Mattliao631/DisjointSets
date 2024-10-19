@@ -9,7 +9,7 @@ struct SetNode {
 
     SetNode(T* data) : data(data) {
         parent = this;
-        successor = nullptr;
+        successor = this;
         rank = 0;
     }
 };

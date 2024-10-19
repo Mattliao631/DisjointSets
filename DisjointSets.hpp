@@ -34,18 +34,12 @@ public:
         } else if (large->rank == small->rank) {
             large->rank++;
         }
-        SetNode<T>* temp = small->parent;
+        swap(small->successor, large->successor);
         small->parent = large;
-        large->parent->successor = small;
-        large->parent = temp;
     }
     void PrintSet(T* data) {
         SetNode<T>* node = nodes[data];
-        node = findSet(node);
-        while (node != nullptr) {
-            cout << *(node->data) << " ";
-            node = node->successor;
-        }
+        printSet(node);
     }
     void PrintAllSets() {
         set<SetNode<T>*> printed;
@@ -53,21 +47,25 @@ public:
             SetNode<T>* node = findSet(it->second);
             SetNode<T>* temp = node;
             if (printed.find(node) == printed.end()) {
-                while (temp != nullptr) {
-                    cout << *(temp->data) << " ";
-                    temp = temp->successor;
-                }
+                printSet(node);
                 cout << endl;
                 printed.insert(node);
             }
-            
         }
     }
 private:
     unordered_map<T*, SetNode<T>*> nodes;
     SetNode<T>* findSet(SetNode<T>* node) {
-        if (node->parent->successor == nullptr) return node;
+        if (node->parent == node) return node;
         node->parent = findSet(node->parent);
         return node->parent;
+    }
+
+    void printSet(SetNode<T>* node) {
+        SetNode<T>* temp = node;
+        do {
+            cout << *(node->data) << " ";
+            node = node->successor;
+        } while(temp != node);
     }
 };
